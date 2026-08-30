@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense List 💰 — Personal Database Dashboard</title>
+  <meta name="description" content="Manage your personal expense database with real-time totals, custom categories, and intuitive entries.">
+  
+  <!-- Common and App Styles -->
+  <link rel="stylesheet" href="../common/css/common.css">
+  <link rel="stylesheet" href="./css/app.css">
+</head>
+<body>
+
+  <!-- Ambient Glow Effects -->
+  <div class="ambient-glow-wrapper" aria-hidden="true">
+    <div class="glow-orb glow-orb-1" style="opacity: 0.3;"></div>
+    <div class="glow-orb glow-orb-2" style="opacity: 0.3;"></div>
+  </div>
+
+  <!-- Top Dashboard Bar -->
+  <header class="dashboard-header">
+    <div class="container dashboard-nav">
+      <div style="display:flex; align-items:center; gap:20px;">
+        <a href="../home/index.html" class="brand-logo">
+          <div class="brand-icon">💰</div>
+          <div class="brand-name">Expense<span>List</span></div>
+        </a>
+
+        <div class="user-profile-badge" id="current-user-badge">
+          <span class="user-avatar" id="user-avatar-display">👨‍💻</span>
+          <div class="user-info">
+            <span class="user-name" id="user-name-display">Loading User...</span>
+            <span class="user-db-tag" id="user-dbtag-display">Database: Loading...</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:12px;">
+        <a href="../home/index.html" class="btn btn-secondary btn-sm" id="btn-home-return" title="Return to Homesite">
+          <span>🏠 Homesite</span>
+        </a>
+        <button type="button" class="btn btn-danger btn-sm" id="btn-logout" title="Sign Out">
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Workspace -->
+  <main class="dashboard-main">
+    <div class="container">
+      
+      <!-- Stats Overview Row -->
+      <div class="stats-grid">
+        <div class="stat-card accent">
+          <div class="stat-label">
+            <span>Total Expenses</span>
+            <span style="font-size:1.2rem;">💰</span>
+          </div>
+          <div class="stat-value gradient-text-accent" id="stat-total-expenses">$0.00</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">
+            <span>Total Recorded Items</span>
+            <span style="font-size:1.2rem;">📝</span>
+          </div>
+          <div class="stat-value" id="stat-item-count">0</div>
+        </div>
+
+        <div class="stat-card purple">
+          <div class="stat-label">
+            <span>Highest Single Expense</span>
+            <span style="font-size:1.2rem;">📈</span>
+          </div>
+          <div class="stat-value gradient-text-purple" id="stat-max-expense">$0.00</div>
+        </div>
+      </div>
+
+      <!-- App Workspace: Add Form + Expense Ledger -->
+      <div class="app-workspace-grid">
+        
+        <!-- Left: Add Expense Form -->
+        <section class="add-expense-card">
+          <div class="card-title-row">
+            <h2 class="card-title">
+              <span>➕</span> Add New Expense
+            </h2>
+            <span class="badge badge-primary">Database Form</span>
+          </div>
+
+          <form id="add-expense-form" novalidate>
+            <div class="form-group">
+              <label for="expense-name" class="form-label">Expense Name / Title</label>
+              <input 
+                type="text" 
+                id="expense-name" 
+                class="form-input" 
+                placeholder="e.g. Wireless Noise-Cancelling Headphones" 
+                required
+                autocomplete="off"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="expense-amount" class="form-label">Amount ($ USD)</label>
+              <input 
+                type="number" 
+                id="expense-amount" 
+                class="form-input" 
+                step="0.01" 
+                min="0.01" 
+                placeholder="0.00" 
+                required
+                autocomplete="off"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="expense-date" class="form-label">Transaction Date</label>
+              <input 
+                type="date" 
+                id="expense-date" 
+                class="form-input" 
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="expense-category" class="form-label">Category</label>
+              <select id="expense-category" class="form-select">
+                <option value="Groceries">🛒 Groceries & Supermarket</option>
+                <option value="Food & Dining">☕ Food & Dining</option>
+                <option value="Electronics">💻 Electronics & Gadgets</option>
+                <option value="Health & Fitness">🏋️ Health & Fitness</option>
+                <option value="Software">⚡ Software & Subscriptions</option>
+                <option value="Business">💼 Business & Client Work</option>
+                <option value="Office">🪑 Office & Workspace</option>
+                <option value="Transportation">🚗 Transportation & Travel</option>
+                <option value="Other">🏷️ Other Miscellaneous</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" id="btn-add-expense" style="width:100%; margin-top:8px;">
+              <span>Add Expense to Database</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </form>
+        </section>
+
+        <!-- Right: Expense Ledger -->
+        <section class="expense-ledger-card">
+          <div class="card-title-row">
+            <h2 class="card-title">
+              <span>📋</span> User Expense Ledger
+            </h2>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="badge badge-green" id="active-db-badge">Active DB</span>
+            </div>
+          </div>
+
+          <!-- Toolbar: Search & Filter -->
+          <div class="ledger-toolbar">
+            <div class="search-filter-box">
+              <input 
+                type="text" 
+                id="ledger-search-input" 
+                class="form-input" 
+                placeholder="🔍 Search expenses..."
+                style="padding: 8px 12px; font-size: 0.88rem;"
+              >
+            </div>
+            
+            <div style="display:flex; gap:8px;">
+              <select id="ledger-cat-filter" class="form-select" style="padding: 8px 12px; font-size: 0.88rem; width: auto;">
+                <option value="ALL">All Categories</option>
+                <option value="Groceries">Groceries</option>
+                <option value="Food & Dining">Food & Dining</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Health & Fitness">Health</option>
+                <option value="Software">Software</option>
+                <option value="Business">Business</option>
+                <option value="Office">Office</option>
+                <option value="Transportation">Transportation</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Expense List Container -->
+          <div class="expense-items-container" id="expense-items-container">
+            <!-- Dynamically populated rows -->
+          </div>
+
+          <!-- Summary Bottom Bar -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px; padding-top:18px; border-top:1px solid var(--border-subtle);">
+            <div style="font-size:0.9rem; color:var(--text-muted);">
+              Showing <span id="displayed-count" style="font-weight:600; color:var(--text-primary);">0</span> items
+            </div>
+            <div style="display:flex; align-items:baseline; gap:12px;">
+              <span style="font-weight:600; color:var(--text-secondary);">Calculated Ledger Total:</span>
+              <span class="gradient-text-accent" id="ledger-bottom-total" style="font-size:1.8rem; font-weight:800;">$0.00</span>
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Notifications -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="../common/js/storage.js"></script>
+  <script src="../common/js/auth.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>

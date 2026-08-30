@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense List 💰 — Modern Multi-User Expense Tracker & Database Portal</title>
+  <meta name="description" content="A sleek and modern web application for tracking your daily expenses. Add expenses, calculate live totals, and access user-isolated database storage.">
+  
+  <!-- Common and Page-Specific Styles -->
+  <link rel="stylesheet" href="../common/css/common.css">
+  <link rel="stylesheet" href="./css/home.css">
+</head>
+<body>
+
+  <!-- Ambient Glow Effects -->
+  <div class="ambient-glow-wrapper" aria-hidden="true">
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+    <div class="glow-orb glow-orb-3"></div>
+  </div>
+
+  <!-- Header / Navigation -->
+  <header class="site-header" id="site-header">
+    <div class="container nav-container">
+      <a href="./index.html" class="brand-logo" id="nav-brand-link">
+        <div class="brand-icon">💰</div>
+        <div class="brand-name">Expense<span>List</span></div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#features" class="nav-link">Features Overview</a></li>
+          <li><a href="#demo" class="nav-link">Live Demo</a></li>
+          <li><a href="#tech" class="nav-link">Architecture</a></li>
+          <li><a href="#login" class="nav-link">Database Access</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#login" class="btn btn-primary btn-sm" id="nav-cta-btn">
+          <span>Sign In</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section" id="hero">
+      <div class="container">
+        <div class="hero-badge-wrapper">
+          <span class="badge badge-primary">
+            <span>✨</span> Modern Financial Workspace
+          </span>
+        </div>
+
+        <h1 class="hero-title">
+          Master Your Daily Expenses with <span class="gradient-text">Precision & Elegance</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Based on the official Expense List architecture. Seamlessly track expenses with custom names, amounts, and dates, calculate real-time totals, and securely manage your isolated user database.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#login" class="btn btn-primary btn-lg" id="hero-access-btn">
+            <span>Access Your Database</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#features" class="btn btn-secondary btn-lg" id="hero-explore-btn">
+            <span>Explore Features</span>
+          </a>
+        </div>
+
+        <!-- Hero Visual Showcase / Live Mockup -->
+        <div class="hero-preview-container">
+          <div class="hero-preview-inner">
+            <div class="preview-header">
+              <div class="preview-window-dots">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <div class="badge badge-cyan" id="hero-live-badge">
+                <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#06b6d4; margin-right:4px;"></span>
+                Live Database Active
+              </div>
+            </div>
+
+            <div class="preview-mock-grid">
+              <div>
+                <div class="preview-stat-card" style="margin-bottom: 16px;">
+                  <div class="preview-stat-label">Current Total Expenses</div>
+                  <div class="preview-stat-value gradient-text-accent" id="hero-preview-total">$282.29</div>
+                </div>
+                <div class="preview-stat-card">
+                  <div class="preview-stat-label">Active Database User</div>
+                  <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
+                    <div style="font-size:1.5rem;">👨‍💻</div>
+                    <div>
+                      <div style="font-weight:600; color:var(--text-primary);">Alex Vance</div>
+                      <div style="font-size:0.8rem; color:var(--text-muted);">alex@example.com (Personal DB)</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div style="font-size:0.85rem; font-weight:600; color:var(--text-secondary); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em;">
+                  Recent Transactions
+                </div>
+                <div class="preview-expense-item">
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:1.1rem;">💻</span>
+                    <div>
+                      <div style="font-weight:600; font-size:0.92rem;">MacBook Stand</div>
+                      <div style="font-size:0.75rem; color:var(--text-muted);">Aug 15, 2026 • Electronics</div>
+                    </div>
+                  </div>
+                  <div style="font-weight:700; color:#f43f5e;">-$49.99</div>
+                </div>
+
+                <div class="preview-expense-item">
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:1.1rem;">🛒</span>
+                    <div>
+                      <div style="font-weight:600; font-size:0.92rem;">Whole Foods Groceries</div>
+                      <div style="font-size:0.75rem; color:var(--text-muted);">Aug 20, 2026 • Groceries</div>
+                    </div>
+                  </div>
+                  <div style="font-weight:700; color:#f43f5e;">-$132.50</div>
+                </div>
+
+                <div class="preview-expense-item">
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:1.1rem;">☕</span>
+                    <div>
+                      <div style="font-weight:600; font-size:0.92rem;">Espresso & Pastry</div>
+                      <div style="font-size:0.75rem; color:var(--text-muted);">Aug 28, 2026 • Food</div>
+                    </div>
+                  </div>
+                  <div style="font-weight:700; color:#f43f5e;">-$14.80</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Features Overview Section (README.md Alignment) -->
+    <section class="section-wrapper" id="features" style="background: rgba(13, 17, 28, 0.4);">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">
+            <span class="badge badge-cyan">Features Overview</span>
+          </div>
+          <h2 class="section-title">Engineered for Frictionless Financial Tracking</h2>
+          <p class="section-desc">
+            Explore the core feature set defined in the project specification, optimized with responsive modern UI paradigms and secure data handling.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <!-- Feature 1 -->
+          <div class="feature-card">
+            <div class="feature-icon-box">➕</div>
+            <h3 class="feature-title">Add New Expenses</h3>
+            <p class="feature-description">
+              Record new expenditure items with custom description names, exact monetary amounts, and date pickers. Includes automatic category tags for smarter budget tracking.
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="feature-card">
+            <div class="feature-icon-box rose">🗑️</div>
+            <h3 class="feature-title">Delete & Manage Items</h3>
+            <p class="feature-description">
+              Easily purge outdated entries or correct mistaken records with intuitive one-click delete actions, keeping your expense registry clean and updated.
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="feature-card">
+            <div class="feature-icon-box green">📊</div>
+            <h3 class="feature-title">Display Total Expenses</h3>
+            <p class="feature-description">
+              Real-time arithmetic computation automatically updates your total spend summary whenever an item is added, modified, or removed.
+            </p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="feature-card">
+            <div class="feature-icon-box cyan">💾</div>
+            <h3 class="feature-title">Per-User Data Isolation</h3>
+            <p class="feature-description">
+              Persistent storage partitions data on a per-user basis. Each user logging into their account accesses exclusively their private expense ledger.
+            </p>
+          </div>
+
+          <!-- Feature 5 -->
+          <div class="feature-card">
+            <div class="feature-icon-box purple">✨</div>
+            <h3 class="feature-title">Intuitive & Sleek Interface</h3>
+            <p class="feature-description">
+              Modern dark mode styling with glassmorphic cards, fluid micro-interactions, responsive mobile views, and instant keyboard navigation support.
+            </p>
+          </div>
+
+          <!-- Feature 6 -->
+          <div class="feature-card">
+            <div class="feature-icon-box">⚡</div>
+            <h3 class="feature-title">Zero Setup Needed</h3>
+            <p class="feature-description">
+              Built on clean Vanilla JavaScript, modern HTML5, and CSS3. Runs instantly in any standard modern web browser without complex build steps.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Live Demo Calculator Section -->
+    <section class="section-wrapper" id="demo">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">
+            <span class="badge badge-green">Try It Live</span>
+          </div>
+          <h2 class="section-title">Interactive Expense Playground</h2>
+          <p class="section-desc">
+            Test the live calculation engine right here on the landing page before logging into your account.
+          </p>
+        </div>
+
+        <div class="demo-calculator-box">
+          <div class="demo-grid">
+            <!-- Demo Form -->
+            <form class="demo-calc-form" id="demo-calc-form">
+              <div class="form-group">
+                <label for="demo-name" class="form-label">Expense Description</label>
+                <input type="text" id="demo-name" class="form-input" placeholder="e.g. Wireless Mouse" required>
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div class="form-group">
+                  <label for="demo-amount" class="form-label">Amount ($)</label>
+                  <input type="number" id="demo-amount" class="form-input" step="0.01" min="0.01" placeholder="29.99" required>
+                </div>
+                <div class="form-group">
+                  <label for="demo-date" class="form-label">Date</label>
+                  <input type="date" id="demo-date" class="form-input" required>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary" id="demo-add-btn">
+                <span>➕ Add to Live Preview</span>
+              </button>
+            </form>
+
+            <!-- Demo Output List -->
+            <div class="demo-live-preview">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">
+                  Live Preview Ledger
+                </div>
+                <button type="button" id="demo-reset-btn" class="btn btn-secondary btn-sm" style="padding:4px 8px; font-size:0.75rem;">
+                  Reset
+                </button>
+              </div>
+
+              <div id="demo-items-list" style="max-height:180px; overflow-y:auto; padding-right:4px;">
+                <!-- Dynamically populated -->
+              </div>
+
+              <div class="demo-total-display">
+                <span style="font-weight:600; color:var(--text-secondary);">Calculated Total:</span>
+                <span class="demo-total-amount" id="demo-calculated-total">$0.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- User Database Access & Login Section -->
+    <section class="auth-section" id="login">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">
+            <span class="badge badge-purple">User Database Portal</span>
+          </div>
+          <h2 class="section-title">Access Your Expense Database</h2>
+          <p class="section-desc">
+            Sign in to access your personal ledger, or create a brand new isolated database for your expenses.
+          </p>
+        </div>
+
+        <div class="auth-card-container">
+          <div class="auth-card-glow"></div>
+          <div class="auth-card">
+            
+            <!-- Auth Navigation Tabs -->
+            <div class="auth-tabs" role="tablist">
+              <button type="button" class="auth-tab-btn active" id="tab-login" role="tab" aria-selected="true" aria-controls="login-form">
+                Sign In to Database
+              </button>
+              <button type="button" class="auth-tab-btn" id="tab-register" role="tab" aria-selected="false" aria-controls="register-form">
+                Create New Database
+              </button>
+            </div>
+
+            <!-- Quick Demo User Access -->
+            <div class="demo-switch-box">
+              <div class="demo-switch-title">
+                <span>⚡</span> 1-Click Demo Accounts (Instant Test)
+              </div>
+              <div class="demo-buttons-row">
+                <button type="button" class="btn-demo-quick" id="btn-quick-alex">
+                  <strong>👨‍💻 Alex Vance</strong>
+                  <span>alex@example.com (Personal DB)</span>
+                </button>
+                <button type="button" class="btn-demo-quick" id="btn-quick-sarah">
+                  <strong>👩‍🎨 Sarah Connor</strong>
+                  <span>sarah@example.com (Studio DB)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Sign In Form -->
+            <form class="auth-form active" id="login-form" novalidate>
+              <div class="form-group">
+                <label for="login-email" class="form-label">Email Address</label>
+                <div class="input-wrapper">
+                  <span class="input-icon-left" aria-hidden="true">✉️</span>
+                  <input 
+                    type="email" 
+                    id="login-email" 
+                    name="email" 
+                    class="form-input has-icon-left" 
+                    placeholder="name@example.com" 
+                    autocomplete="username" 
+                    required
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label">
+                  <label for="login-password">Password</label>
+                  <a href="javascript:void(0)" id="link-forgot-pass" style="font-size:0.8rem; color:var(--text-accent);">Forgot?</a>
+                </div>
+                <div class="input-wrapper">
+                  <span class="input-icon-left" aria-hidden="true">🔒</span>
+                  <input 
+                    type="password" 
+                    id="login-password" 
+                    name="password" 
+                    class="form-input has-icon-left has-icon-right" 
+                    placeholder="Enter your password" 
+                    autocomplete="current-password" 
+                    required
+                  >
+                  <button type="button" class="input-icon-right-btn" id="toggle-login-pass" aria-label="Toggle password visibility">
+                    👁️
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-lg" id="btn-submit-login" style="width:100%; margin-top:12px;">
+                <span>Unlock Expense Database</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </form>
+
+            <!-- Register Form -->
+            <form class="auth-form" id="register-form" novalidate>
+              <div class="form-group">
+                <label for="register-name" class="form-label">Full Name</label>
+                <div class="input-wrapper">
+                  <span class="input-icon-left" aria-hidden="true">👤</span>
+                  <input 
+                    type="text" 
+                    id="register-name" 
+                    name="name" 
+                    class="form-input has-icon-left" 
+                    placeholder="e.g. John Doe" 
+                    autocomplete="name" 
+                    required
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="register-email" class="form-label">Email Address</label>
+                <div class="input-wrapper">
+                  <span class="input-icon-left" aria-hidden="true">✉️</span>
+                  <input 
+                    type="email" 
+                    id="register-email" 
+                    name="email" 
+                    class="form-input has-icon-left" 
+                    placeholder="name@example.com" 
+                    autocomplete="username" 
+                    required
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="register-password" class="form-label">Password (min 6 characters)</label>
+                <div class="input-wrapper">
+                  <span class="input-icon-left" aria-hidden="true">🔒</span>
+                  <input 
+                    type="password" 
+                    id="register-password" 
+                    name="password" 
+                    class="form-input has-icon-left has-icon-right" 
+                    placeholder="Create a strong password" 
+                    autocomplete="new-password" 
+                    minlength="6"
+                    required
+                  >
+                  <button type="button" class="input-icon-right-btn" id="toggle-reg-pass" aria-label="Toggle password visibility">
+                    👁️
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="register-account-type" class="form-label">Database Type</label>
+                <select id="register-account-type" class="form-select">
+                  <option value="Personal Finances">Personal Finances</option>
+                  <option value="Freelance Business">Freelance / Studio</option>
+                  <option value="Family Budget">Family Budget</option>
+                  <option value="Travel & Projects">Travel & Projects</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-lg" id="btn-submit-register" style="width:100%; margin-top:12px;">
+                <span>Initialize & Access Database</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture & Tech Stack Section -->
+    <section class="section-wrapper" id="tech" style="background: rgba(10, 13, 20, 0.6); border-top: 1px solid var(--border-subtle);">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">
+            <span class="badge badge-primary">Technical Specs</span>
+          </div>
+          <h2 class="section-title">Built with Lightweight Web Standards</h2>
+          <p class="section-desc">
+            Clean code, modular separation, and zero external runtime dependencies.
+          </p>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:20px;">
+          <div class="glass-panel" style="padding:24px; text-align:center;">
+            <div style="font-size:2rem; margin-bottom:10px;">🌐</div>
+            <div style="font-weight:700; font-size:1.1rem; margin-bottom:6px;">HTML5 & CSS3</div>
+            <div style="font-size:0.85rem; color:var(--text-secondary);">Semantic markup, custom properties, and fluid typography</div>
+          </div>
+
+          <div class="glass-panel" style="padding:24px; text-align:center;">
+            <div style="font-size:2rem; margin-bottom:10px;">⚡</div>
+            <div style="font-weight:700; font-size:1.1rem; margin-bottom:6px;">Vanilla JavaScript</div>
+            <div style="font-size:0.85rem; color:var(--text-secondary);">ES6+ modular logic for fast execution and state updates</div>
+          </div>
+
+          <div class="glass-panel" style="padding:24px; text-align:center;">
+            <div style="font-size:2rem; margin-bottom:10px;">🔐</div>
+            <div style="font-weight:700; font-size:1.1rem; margin-bottom:6px;">Multi-User Storage</div>
+            <div style="font-size:0.85rem; color:var(--text-secondary);">User-partitioned local storage & MySQL-ready data schema</div>
+          </div>
+
+          <div class="glass-panel" style="padding:24px; text-align:center;">
+            <div style="font-size:2rem; margin-bottom:10px;">🛡️</div>
+            <div style="font-weight:700; font-size:1.1rem; margin-bottom:6px;">MIT Licensed</div>
+            <div style="font-size:0.85rem; color:var(--text-secondary);">Open source, fully extensible, and developer-friendly</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-logo" style="margin-bottom:12px;">
+            <div class="brand-icon">💰</div>
+            <div class="brand-name">Expense<span>List</span></div>
+          </div>
+          <p class="footer-brand-desc">
+            A sleek, modern web application for tracking daily expenses and managing multi-user personal finance databases.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Navigation</h4>
+          <ul class="footer-links-list">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#features">Features Overview</a></li>
+            <li><a href="#demo">Live Demo</a></li>
+            <li><a href="#login">Database Login</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Project & License</h4>
+          <ul class="footer-links-list">
+            <li><span style="color:var(--text-secondary); font-size:0.88rem;">Open Source under MIT</span></li>
+            <li><span style="color:var(--text-secondary); font-size:0.88rem;">Vanilla JS Architecture</span></li>
+            <li><a href="#login" style="color:var(--text-accent);">Launch App Dashboard</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Expense List. Built with pure web standards.</div>
+        <div>
+          <a href="#hero" style="color:var(--text-secondary); font-size:0.85rem;">↑ Back to top</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="../common/js/storage.js"></script>
+  <script src="../common/js/auth.js"></script>
+  <script src="./js/home.js"></script>
+</body>
+</html>
