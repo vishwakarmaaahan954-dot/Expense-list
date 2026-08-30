@@ -6,7 +6,8 @@
 const STORAGE_KEYS = {
   USERS: 'expenselist_users_db',
   ACTIVE_SESSION: 'expenselist_active_session',
-  EXPENSES_PREFIX: 'expenselist_user_expenses_'
+  EXPENSES_PREFIX: 'expenselist_user_expenses_',
+  CYCLE_DAY_PREFIX: 'expenselist_user_cycle_day_'
 };
 
 // Default seed demo users
@@ -267,6 +268,98 @@ const ExpenseDB = {
     const expenses = this.getUserExpenses(userId);
     const total = expenses.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
     return parseFloat(total.toFixed(2));
+  },
+
+  /**
+   * Get user's preset monthly cycle start day (defaults to 1)
+   */
+  getUserCycleDay(userId) {
+    if (!userId) return 1;
+    try {
+      const key = `${STORAGE_KEYS.CYCLE_DAY_PREFIX}${userId}`;
+      const savedDay = localStorage.getItem(key);
+      const parsed = parseInt(savedDay, 10);
+      return (parsed >= 1 && parsed <= 31) ? parsed : 1;
+    } catch (e) {
+      return 1;
+    }
+  },
+
+  /**
+   * Save user's preset monthly cycle start day
+   */
+  setUserCycleDay(userId, day) {
+    if (!userId) return false;
+    try {
+      const validDay = Math.min(Math.max(parseInt(day, 10) || 1, 1), 31);
+      const key = `${STORAGE_KEYS.CYCLE_DAY_PREFIX}${userId}`;
+      localStorage.setItem(key, validDay.toString());
+      return true;
+    } catch (e) {
+      console.error('Failed to save user cycle day', e);
+      return false;
+    }
+  },
+
+  /**
+   * Calculate date range for a monthly cycle given a start day (1-31)
+   */
+  getCycleDateRange(cycleDay = 1, referenceDate = new Date()) {
+    const year = referenceDate.getFullYear();
+    const month = referenceDate.getMonth(); // 0-11
+    const day = referenceDate.getDate(); // 1-31
+
+    let startYear, startMonth, endYear, endMonth;
+
+    if (day >= cycleDay) {
+      startYear = year;
+      startMonth = month;
+      endMonth = month + 1;
+      endYear = year;
+      if (endMonth > 11) {
+        endMonth = 0;
+        endYear = year + 1;
+      }
+    } else {
+      startMonth = month - 1;
+      startYear = year;
+      if (startMonth < 0) {
+        startMonth = 11;
+        startYear = year - 1;
+      }
+      endYear = year;
+      endMonth = month;
+    }
+
+    // Days in start month
+    const maxDaysStart = new Date(startYear, startMonth + 1, 0).getDate();
+    const actualStartDay = Math.min(cycleDay, maxDaysStart);
+    const startDateObj = new Date(startYear, startMonth, actualStartDay);
+
+    // End date is 1 day before the next cycle start day
+    const maxDaysEnd = new Date(endYear, endMonth + 1, 0).getDate();
+    const targetEndCycleDay = Math.min(cycleDay, maxDaysEnd);
+    const endDateObj = new Date(endYear, endMonth, targetEndCycleDay);
+    endDateObj.setDate(endDateObj.getDate() - 1);
+
+    const formatYMD = (d) => {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const dt = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${dt}`;
+    };
+
+    const formatDisplay = (d) => {
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    };
+
+    return {
+      startDate: formatYMD(startDateObj),
+      endDate: formatYMD(endDateObj),
+      label: `${formatDisplay(startDateObj)} – ${formatDisplay(endDateObj)}`,
+      startDisplay: formatDisplay(startDateObj),
+      endDisplay: formatDisplay(endDateObj)
+    };
   },
 
   /**

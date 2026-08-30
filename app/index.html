@@ -55,26 +55,40 @@
       <div class="stats-grid">
         <div class="stat-card accent">
           <div class="stat-label">
-            <span>Total Expenses</span>
+            <span id="stat-total-title">Filtered Expenses Total</span>
             <span style="font-size:1.2rem;">💰</span>
           </div>
           <div class="stat-value gradient-text-accent" id="stat-total-expenses">$0.00</div>
+          <div id="stat-filter-label" class="stat-subtext">Current Monthly Cycle</div>
         </div>
 
         <div class="stat-card">
           <div class="stat-label">
-            <span>Total Recorded Items</span>
+            <span>Monthly Cycle Total</span>
+            <button type="button" id="btn-open-cycle-settings" class="btn-cycle-gear" title="Configure Monthly Cycle Start Day">
+              ⚙️ <span id="stat-cycle-day-badge">Day 1</span>
+            </button>
+          </div>
+          <div class="stat-value gradient-text" id="stat-monthly-cycle-total">$0.00</div>
+          <div id="stat-cycle-range-label" class="stat-subtext">Aug 1 – Aug 31</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">
+            <span>Recorded Items</span>
             <span style="font-size:1.2rem;">📝</span>
           </div>
           <div class="stat-value" id="stat-item-count">0</div>
+          <div id="stat-item-subtext" class="stat-subtext">Showing 0 of 0 entries</div>
         </div>
 
         <div class="stat-card purple">
           <div class="stat-label">
-            <span>Highest Single Expense</span>
+            <span>Highest In Period</span>
             <span style="font-size:1.2rem;">📈</span>
           </div>
           <div class="stat-value gradient-text-purple" id="stat-max-expense">$0.00</div>
+          <div id="stat-max-subtext" class="stat-subtext">Single transaction</div>
         </div>
       </div>
 
@@ -160,20 +174,20 @@
             </div>
           </div>
 
-          <!-- Toolbar: Search & Filter -->
+          <!-- Toolbar: Search, Category & Date Filters -->
           <div class="ledger-toolbar">
             <div class="search-filter-box">
               <input 
                 type="text" 
                 id="ledger-search-input" 
                 class="form-input" 
-                placeholder="🔍 Search expenses..."
+                placeholder="🔍 Search title or category..."
                 style="padding: 8px 12px; font-size: 0.88rem;"
               >
             </div>
             
-            <div style="display:flex; gap:8px;">
-              <select id="ledger-cat-filter" class="form-select" style="padding: 8px 12px; font-size: 0.88rem; width: auto;">
+            <div class="filters-row">
+              <select id="ledger-cat-filter" class="form-select filter-select" title="Filter by category">
                 <option value="ALL">All Categories</option>
                 <option value="Groceries">Groceries</option>
                 <option value="Food & Dining">Food & Dining</option>
@@ -185,6 +199,53 @@
                 <option value="Transportation">Transportation</option>
                 <option value="Other">Other</option>
               </select>
+
+              <select id="ledger-time-filter" class="form-select filter-select" title="Filter by timeframe or date">
+                <option value="THIS_CYCLE" selected>📊 Current Monthly Cycle</option>
+                <option value="ALL">📅 All Time (Grand Total)</option>
+                <option value="TODAY">📆 Today</option>
+                <option value="DAY">🎯 Specific Day (Date)</option>
+                <option value="RANGE">🗓️ Custom Date Range</option>
+                <option value="LAST_7_DAYS">⚡ Last 7 Days</option>
+                <option value="LAST_30_DAYS">⚡ Last 30 Days</option>
+                <option value="SPECIFIC_MONTH">🗓️ Specific Month</option>
+              </select>
+
+              <!-- Dynamic Inline Date Controls -->
+              <div id="dynamic-date-controls" class="dynamic-date-controls">
+                <!-- Single day input -->
+                <div id="single-date-box" class="date-input-subgroup" style="display:none;">
+                  <input type="date" id="filter-single-date" class="form-input form-input-sm" title="Choose specific date">
+                </div>
+
+                <!-- Custom range inputs -->
+                <div id="range-date-box" class="date-input-subgroup" style="display:none;">
+                  <input type="date" id="filter-start-date" class="form-input form-input-sm" title="From date">
+                  <span class="range-separator">to</span>
+                  <input type="date" id="filter-end-date" class="form-input form-input-sm" title="To date">
+                </div>
+
+                <!-- Specific month input -->
+                <div id="month-date-box" class="date-input-subgroup" style="display:none;">
+                  <input type="month" id="filter-month-date" class="form-input form-input-sm" title="Choose month">
+                </div>
+              </div>
+
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-clear-filters" title="Reset all filters to default" style="display:none;">
+                <span>✕ Reset</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Active Filter Banner Banner -->
+          <div class="active-filter-banner" id="active-filter-banner" style="display:none;">
+            <div class="active-filter-left">
+              <span class="active-filter-icon">🔍</span>
+              <span id="active-filter-text">Active Filter Applied</span>
+            </div>
+            <div class="active-filter-right">
+              <span class="badge badge-accent" id="active-filter-total-badge">$0.00</span>
+              <button type="button" class="btn-clear-inline" id="btn-clear-filter-banner" title="Clear filter">✕ Clear</button>
             </div>
           </div>
 
@@ -194,12 +255,12 @@
           </div>
 
           <!-- Summary Bottom Bar -->
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px; padding-top:18px; border-top:1px solid var(--border-subtle);">
+          <div class="ledger-bottom-summary">
             <div style="font-size:0.9rem; color:var(--text-muted);">
               Showing <span id="displayed-count" style="font-weight:600; color:var(--text-primary);">0</span> items
             </div>
             <div style="display:flex; align-items:baseline; gap:12px;">
-              <span style="font-weight:600; color:var(--text-secondary);">Calculated Ledger Total:</span>
+              <span style="font-weight:600; color:var(--text-secondary);" id="bottom-total-label">Active Filter Total:</span>
               <span class="gradient-text-accent" id="ledger-bottom-total" style="font-size:1.8rem; font-weight:800;">$0.00</span>
             </div>
           </div>
@@ -209,6 +270,50 @@
       </div>
     </div>
   </main>
+
+  <!-- Monthly Preset Cycle Settings Modal -->
+  <div class="cycle-modal" id="cycle-modal" role="dialog" aria-modal="true" aria-labelledby="modal-cycle-title">
+    <div class="modal-content" style="max-width: 440px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 id="modal-cycle-title" style="font-size:1.2rem; display:flex; align-items:center; gap:8px;">
+          <span>⚙️</span> Monthly Calculation Preset
+        </h3>
+        <button type="button" id="btn-close-cycle-modal" class="btn btn-secondary btn-sm" style="padding:4px 8px;">✕</button>
+      </div>
+
+      <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.5;">
+        Configure the day of the month your monthly expense tracking cycle starts (e.g. <strong>Day 1</strong> for calendar month, or your salary/billing date like <strong>Day 5</strong> or <strong>Day 25</strong>).
+      </p>
+
+      <form id="cycle-settings-form">
+        <div class="form-group">
+          <label for="cycle-day-select" class="form-label">Monthly Cycle Start Day (1st – 31st)</label>
+          <select id="cycle-day-select" class="form-select">
+            <!-- Dynamically populated 1 to 31 options -->
+          </select>
+        </div>
+
+        <div class="cycle-preview-box">
+          <div style="font-size:0.78rem; color:var(--text-muted); text-transform:uppercase; font-weight:600; margin-bottom:4px;">
+            Current Active Cycle Range:
+          </div>
+          <div id="cycle-preview-range" style="font-size:0.95rem; font-weight:700; color:var(--accent);">
+            Calculating...
+          </div>
+          <div style="font-size:0.78rem; color:var(--text-secondary); margin-top:4px;">
+            Monthly totals and cycle filters will automatically group expenses across this period.
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px;">
+          <button type="button" id="btn-cancel-cycle" class="btn btn-secondary btn-sm">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">
+            <span>Save Preset Day</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- Toast Notifications -->
   <div class="toast-container" id="toast-container"></div>
